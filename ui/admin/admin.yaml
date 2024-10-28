@@ -1,0 +1,244 @@
+about:
+  date: October 28, 2024 19:22:01
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+info:
+  number_relationships: 7
+  number_tables: 8
+info_toggle_checked: true
+resources:
+  Client:
+    attributes:
+    - label: ' first_name*'
+      name: first_name
+      required: true
+      search: true
+      sort: true
+    - name: last_name
+      required: true
+    - name: phone_number
+    - name: email
+    - name: address
+    - name: id
+    description: Represents a client owning dogs that require walking.
+    info_list: Represents a client owning dogs that require walking.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - client_id
+      name: DogList
+      resource: Dog
+    - direction: tomany
+      fks:
+      - client_id
+      name: FeedbackList
+      resource: Feedback
+    - direction: tomany
+      fks:
+      - client_id
+      name: PaymentList
+      resource: Payment
+    type: Client
+    user_key: first_name
+  Dog:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: client_id
+      required: true
+    - name: age
+    - name: id
+    - name: breed
+    description: Represents a dog belonging to a client.
+    info_list: Represents a dog belonging to a client.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - dog_id
+      name: WalkScheduleList
+      resource: WalkSchedule
+    - direction: toone
+      fks:
+      - client_id
+      name: client
+      resource: Client
+    type: Dog
+    user_key: name
+  DogWalker:
+    attributes:
+    - label: ' first_name*'
+      name: first_name
+      required: true
+      search: true
+      sort: true
+    - name: last_name
+      required: true
+    - name: phone_number
+    - name: email
+    - name: hourly_rate
+    - name: id
+    description: Represents a dog walker employed by the business.
+    info_list: Represents a dog walker employed by the business.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - dog_walker_id
+      name: WalkList
+      resource: Walk
+    type: DogWalker
+    user_key: first_name
+  Feedback:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: client_id
+      required: true
+    - name: walk_id
+      required: true
+    - name: rating
+    - name: comments
+    description: Represents feedback from a client about a walk.
+    info_list: Represents feedback from a client about a walk.
+    tab_groups:
+    - direction: toone
+      fks:
+      - client_id
+      name: client
+      resource: Client
+    - direction: toone
+      fks:
+      - walk_id
+      name: walk
+      resource: Walk
+    type: Feedback
+    user_key: id
+  Payment:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: client_id
+      required: true
+    - name: amount
+      required: true
+    - name: date
+      type: DATETIME
+    description: Represents a payment made by a client for dog walking services.
+    info_list: Represents a payment made by a client for dog walking services.
+    tab_groups:
+    - direction: toone
+      fks:
+      - client_id
+      name: client
+      resource: Client
+    type: Payment
+    user_key: id
+  Walk:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: dog_walker_id
+      required: true
+    - name: date
+      type: DATETIME
+    - name: duration
+    - name: completed
+    description: Represents a scheduled dog walking session.
+    info_list: Represents a scheduled dog walking session.
+    tab_groups:
+    - direction: tomany
+      fks:
+      - walk_id
+      name: FeedbackList
+      resource: Feedback
+    - direction: tomany
+      fks:
+      - walk_id
+      name: WalkScheduleList
+      resource: WalkSchedule
+    - direction: toone
+      fks:
+      - dog_walker_id
+      name: dog_walker
+      resource: DogWalker
+    type: Walk
+    user_key: id
+  WalkLocation:
+    attributes:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+    - name: address
+    - name: id
+    description: Represents a location where a dog walk can take place.
+    info_list: Represents a location where a dog walk can take place.
+    type: WalkLocation
+    user_key: name
+  WalkSchedule:
+    attributes:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+    - name: dog_id
+      required: true
+    - name: walk_id
+      required: true
+    description: Represents an association between a walk and a dog.
+    info_list: Represents an association between a walk and a dog.
+    tab_groups:
+    - direction: toone
+      fks:
+      - dog_id
+      name: dog
+      resource: Dog
+    - direction: toone
+      fks:
+      - walk_id
+      name: walk
+      resource: Walk
+    type: WalkSchedule
+    user_key: id
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    detail_mode: tab
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: 'false'
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    new_mode: dialog
+    pick_style: list
+    row_height: small,
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: 'false'

@@ -1,0 +1,372 @@
+about:
+  date: October 28, 2024 19:22:01
+  recent_changes: works with modified safrs-react-admin
+  version: 0.0.0
+api_root: '{http_type}://{swagger_host}:{port}/{api}'
+authentication: '{system-default}'
+entities:
+  Client:
+    columns:
+    - label: ' first_name*'
+      name: first_name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: last_name
+      required: true
+      template: text
+      type: VARCHAR
+    - name: phone_number
+      template: text
+      type: VARCHAR
+    - name: email
+      template: text
+      type: VARCHAR
+    - name: address
+      template: text
+      type: VARCHAR
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Represents a client owning dogs that require walking.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: first_name
+    home_template: home_template.html
+    info_list: Represents a client owning dogs that require walking.
+    label: Client
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - client_id
+      name: DogList
+      resource: Dog
+    - direction: tomany
+      fks:
+      - client_id
+      name: FeedbackList
+      resource: Feedback
+    - direction: tomany
+      fks:
+      - client_id
+      name: PaymentList
+      resource: Payment
+    type: Client
+  Dog:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: client_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: age
+      template: integer
+      type: INTEGER
+    - name: id
+      template: integer
+      type: INTEGER
+    - name: breed
+      template: text
+      type: VARCHAR
+    description: Represents a dog belonging to a client.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Represents a dog belonging to a client.
+    label: Dog
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - dog_id
+      name: WalkScheduleList
+      resource: WalkSchedule
+    - direction: toone
+      fks:
+      - client_id
+      name: client
+      resource: Client
+    type: Dog
+  DogWalker:
+    columns:
+    - label: ' first_name*'
+      name: first_name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: last_name
+      required: true
+      template: text
+      type: VARCHAR
+    - name: phone_number
+      template: text
+      type: VARCHAR
+    - name: email
+      template: text
+      type: VARCHAR
+    - name: hourly_rate
+      template: real
+      type: FLOAT
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Represents a dog walker employed by the business.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: first_name
+    home_template: home_template.html
+    info_list: Represents a dog walker employed by the business.
+    label: DogWalker
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - dog_walker_id
+      name: WalkList
+      resource: Walk
+    type: DogWalker
+  Feedback:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: client_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: walk_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: rating
+      template: integer
+      type: INTEGER
+    - name: comments
+      template: text
+      type: VARCHAR
+    description: Represents feedback from a client about a walk.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Represents feedback from a client about a walk.
+    label: Feedback
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - client_id
+      name: client
+      resource: Client
+    - direction: toone
+      fks:
+      - walk_id
+      name: walk
+      resource: Walk
+    type: Feedback
+  Payment:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: client_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: amount
+      required: true
+      template: real
+      type: FLOAT
+    - name: date
+      type: DATETIME
+    description: Represents a payment made by a client for dog walking services.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Represents a payment made by a client for dog walking services.
+    label: Payment
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - client_id
+      name: client
+      resource: Client
+    type: Payment
+  Walk:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: dog_walker_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: date
+      type: DATETIME
+    - name: duration
+      template: integer
+      type: INTEGER
+    - name: completed
+      template: text
+      type: BOOLEAN
+    description: Represents a scheduled dog walking session.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Represents a scheduled dog walking session.
+    label: Walk
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: tomany
+      fks:
+      - walk_id
+      name: FeedbackList
+      resource: Feedback
+    - direction: tomany
+      fks:
+      - walk_id
+      name: WalkScheduleList
+      resource: WalkSchedule
+    - direction: toone
+      fks:
+      - dog_walker_id
+      name: dog_walker
+      resource: DogWalker
+    type: Walk
+  WalkLocation:
+    columns:
+    - label: ' name*'
+      name: name
+      required: true
+      search: true
+      sort: true
+      template: text
+      type: VARCHAR
+    - name: address
+      template: text
+      type: VARCHAR
+    - name: id
+      template: integer
+      type: INTEGER
+    description: Represents a location where a dog walk can take place.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: name
+    home_template: home_template.html
+    info_list: Represents a location where a dog walk can take place.
+    label: WalkLocation
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    type: WalkLocation
+  WalkSchedule:
+    columns:
+    - label: ' id*'
+      name: id
+      search: true
+      sort: true
+      template: integer
+      type: INTEGER
+    - name: dog_id
+      required: true
+      template: integer
+      type: INTEGER
+    - name: walk_id
+      required: true
+      template: integer
+      type: INTEGER
+    description: Represents an association between a walk and a dog.
+    detail_template: detail_template.html
+    exclude: 'false'
+    favorite: id
+    home_template: home_template.html
+    info_list: Represents an association between a walk and a dog.
+    label: WalkSchedule
+    mode: tab
+    new_template: new_template.html
+    primary_key:
+    - id
+    tab_groups:
+    - direction: toone
+      fks:
+      - dog_id
+      name: dog
+      resource: Dog
+    - direction: toone
+      fks:
+      - walk_id
+      name: walk
+      resource: Walk
+    type: WalkSchedule
+settings:
+  HomeJS: /admin-app/home.js
+  max_list_columns: 8
+  style_guide:
+    applicationLocales:
+    - en
+    - es
+    currency_symbol: $
+    currency_symbol_position: left
+    date_format: LL
+    decimal_max: '1000000000'
+    decimal_min: '0'
+    decimal_separator: .
+    edit_on_mode: dblclick
+    exclude_listpicker: false
+    include_translation: false
+    keycloak_client_id: alsclient
+    keycloak_realm: kcals
+    keycloak_url: http://localhost:8080
+    locale: en
+    max_decimal_digits: '4'
+    min_decimal_digits: '2'
+    mode: tab
+    pick_style: list
+    serviceType: OntimizeEE
+    startSessionPath: /auth/login
+    style: light
+    thousand_separator: ','
+    use_keycloak: false
